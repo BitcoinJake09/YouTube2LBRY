@@ -16,3 +16,8 @@ will output a "LBRY-Subscriptions.txt" file containing anyone that is on LBRY th
 
 
 DEMO VIDEO: https://youtu.be/VUZerka6ieQ
+
+
+to run just the jar file, download and exacute with your "subscription_manager" file in same directory
+
+java -jar YTtoLBRY.jar
