@@ -61,7 +61,7 @@ public class YTtoLBRY {
 				//System.out.println(YTtoConvert);
 				String temp = getLBRYchannel(YTtoConvert);
 			        JSONParser parser = new JSONParser();
-			        JSONObject response_object = (JSONObject) parser.parse(temp);
+			        JSONObject response_object = (JSONObject) parser.parse(new StringReader(temp));
 				//System.out.println(response_object.toString());
 				JSONObject temp_object = (JSONObject) response_object.get("data");
 				String lbryChannels = temp_object.get("channels").toString(); 
@@ -140,9 +140,9 @@ tempLBRYchannels  = tempLBRYchannels.substring(0, tempLBRYchannels.length()-1);
         }
         in.close();
         //System.out.println(response.toString());
-        JSONObject response_object = (JSONObject) new JSONParser().parse(response.toString());
+        JSONObject response_object = (JSONObject) new JSONParser().parse(new StringReader(response.toString()));
         //System.out.println(response_object);
-      return ((JSONObject) new JSONParser().parse(response.toString())).toString();
+      return ((JSONObject) new JSONParser().parse(new StringReader(response.toString()))).toString();
     } else {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
         String inputLine;
@@ -153,7 +153,7 @@ tempLBRYchannels  = tempLBRYchannels.substring(0, tempLBRYchannels.length()-1);
         }
         in.close();
         //System.out.println(response.toString());
-        JSONObject response_object = (JSONObject) new JSONParser().parse(response.toString());
+        JSONObject response_object = (JSONObject) new JSONParser().parse(new StringReader(response.toString()));
 	
         return new String();
     }
