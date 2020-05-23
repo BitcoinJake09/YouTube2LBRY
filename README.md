@@ -13,3 +13,6 @@ java YTtoLBRY
 requires a YouTube "subscription_manager" file to be in same directory
 
 will output a "LBRY-Subscriptions.txt" file containing anyone that is on LBRY that you follow on Youtube.
+
+
+DEMO VIDEO: https://youtu.be/VUZerka6ieQ
