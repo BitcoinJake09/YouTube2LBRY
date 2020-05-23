@@ -1,3 +1,8 @@
+/* YTtoLBRY.java @BitcoinJake09 05/17/2020
+This is an opensource GUI to help convert YT accounts you follow to LBRY if they have a LBRY account
+
+if you are compiling and running yourself you may need to change your java.policy to allow it to run to be able to midify files to save things. http://mindprod.com/jgloss/signedapplets.html#PROCESS
+*/
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,9 +18,10 @@ import java.util.*;
 public class YTtoLBRY {
 	public static void main(String[] args) throws ParseException {
 	String stringToSplit = "";
-        String[] tempArray;
+        String[] tempArray, finalArray, tempSplit, finalLBRYchannels;
         String delimiter = " ";
 	String YTtoConvert = "";
+	String tempLBRYchannels = "";
 	int counts=1;
 		if (args.length==0) {
 			try {
@@ -42,8 +48,8 @@ public class YTtoLBRY {
 						tempArray[i] = tempArray[i].replaceFirst("=","");
 						tempArray[i] = tempArray[i].split("=")[0];
 						tempArray[i] = tempArray[i].substring(2, tempArray[i].length()-1);
-            					System.out.println(counts+") "+ tempArray[i] +"\n");
-						System.out.println(counts+") "+ tempArray[i] +"\n");
+            					//System.out.println(counts+") "+ tempArray[i] +"\n");
+						//System.out.println(counts+") "+ tempArray[i] +"\n");
 						if (i <= tempArray.length-2) {
 							YTtoConvert = YTtoConvert +tempArray[i]+",";
 						} else {
@@ -52,9 +58,47 @@ public class YTtoLBRY {
 						counts++;
 					}
 				}
-				System.out.println(YTtoConvert);
+				//System.out.println(YTtoConvert);
 				String temp = getLBRYchannel(YTtoConvert);
-				System.out.println(temp);
+			        JSONParser parser = new JSONParser();
+			        JSONObject response_object = (JSONObject) parser.parse(temp);
+				//System.out.println(response_object.toString());
+				JSONObject temp_object = (JSONObject) response_object.get("data");
+				String lbryChannels = temp_object.get("channels").toString(); 
+				delimiter = ",";
+        			finalArray = lbryChannels.split(delimiter);
+				finalArray[0] = finalArray[0].substring(1, finalArray[0].length());
+				finalArray[finalArray.length-1] = finalArray[finalArray.length-1].substring(0, finalArray[finalArray.length-1].length()-1);
+				//System.out.println(temp);
+				for (int z = 0; z < finalArray.length; z++) {
+				delimiter = ":";
+        			tempSplit = finalArray[z].split(delimiter);
+				//System.out.println("tempSplit[0]) "+ tempSplit[0]);
+				//System.out.println("tempSplit[1]) "+ tempSplit[1]);
+				if (tempSplit[1].length() >= 5) {
+				tempLBRYchannels = tempLBRYchannels + tempSplit[1] + ","; 		
+				}
+				//System.out.println("Channel " +z+") "+ finalArray[z]);
+				
+				}
+tempLBRYchannels  = tempLBRYchannels.substring(0, tempLBRYchannels.length()-1);
+		tempLBRYchannels = tempLBRYchannels.replaceAll("\"", "");
+		delimiter = ",";
+        			finalLBRYchannels = tempLBRYchannels.split(delimiter);
+      File myObj = new File("LBRY-Subscriptions.txt");
+    if (myObj.createNewFile()) {
+        System.out.println("File created: " + myObj.getName());
+      } else {
+        System.out.println("File already exists.");
+      }
+      FileWriter myWriter = new FileWriter("LBRY-Subscriptions.txt");
+
+		for (int a = 0; a < finalLBRYchannels.length; a++) {
+		System.out.println("lbry://" + finalLBRYchannels[a]);
+		myWriter.write("lbry://" + finalLBRYchannels[a]+"\n");
+	}
+         myWriter.close();
+      System.out.println("Successfully wrote to the file.");
 			} catch(Exception excpets) {
 				System.out.println("File not found");
 			}
